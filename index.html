@@ -1,1 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Custom Freshservice Portal</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { color: #0078D7; }
+    .card { border: 1px solid #ccc; padding: 20px; margin: 10px; display: inline-block; width: 250px; }
+  </style>
+</head>
+<body>
+  <h1>Welcome to Our Support Portal</h1>
+  <p>Use the cards below to start your requests:</p>
+  <div id="journeys"></div>
 
+  <script>
+    const apiKey = "YOUR_API_KEY"; // Replace with your Freshservice API key
+    const domain = "YOUR_DOMAIN"; // e.g., company.freshservice.com
+
+    async function fetchJourneys() {
+      const response = await fetch(`https://${domain}/api/v2/journeys`, {
+        headers: {
+          "Authorization": "Basic " + btoa(apiKey + ":X"),
+          "Content-Type": "application/json"
+        }
+      });
+      const data = await response.json();
+      const container = document.getElementById('journeys');
+      data.journeys.forEach(journey => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<h3>${journey.name}</h3><p>${journey.description}</p>`;
+        container.appendChild(card);
+      });
+    }
+
+    fetchJourneys();
+  </script>
+</body>
+</html>
